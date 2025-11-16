@@ -1,10 +1,12 @@
-from fasthtml.common import *
+from employee_events.team import Team
+from fasthtml.common import FastHTML, H1, Div, serve, RedirectResponse
 import matplotlib.pyplot as plt
 
 
 # Import QueryBase, Employee, Team from employee_events
 #### YOUR CODE HERE
-from employee_events import QueryBase, Employee, Team
+from employee_events.query_base import QueryBase
+from employee_events.employee import Employee
 
 # import the load_model function from the utils.py file
 #### YOUR CODE HERE
@@ -28,6 +30,7 @@ from combined_components import FormGroup, CombinedComponent
 # Create a subclass of base_components/dropdown
 # called `ReportDropdown`
 #### YOUR CODE HERE
+class ReportDropdown(Dropdown):
 
     # Overwrite the `component_data` method
     # Ensure the method uses the same parameters
@@ -35,13 +38,12 @@ from combined_components import FormGroup, CombinedComponent
     # Overwrite the build_component method
     # ensuring it has the same parameters
     # as the Report parent class's method
-def component_data(self, model):
-    return model.user_types()
+    def component_data(self, model):
+        return model.user_types()
 
-def build_component(self, model):
-    self.label = model.name
-    return super().build_component(model)
-    
+    def build_component(self, model):
+        self.label = model.name
+        return super().build_component(model)
     # Overwrite the `component_data` method
     # Ensure the method uses the same parameters
     # as the parent class method
@@ -50,8 +52,8 @@ def build_component(self, model):
         # call the employee_events method
         # that returns the user-type's
         # names and ids
-def component_data(self, model):
-    return model.user_types()
+    def component_data(self, model):
+        return model.user_types()
 
 # Create a subclass of base_components/BaseComponent
 # called `Header`
@@ -321,7 +323,6 @@ def update_dropdown(r):
 
 @app.post('/update_data')
 async def update_data(r):
-    from fasthtml.common import RedirectResponse
     data = await r.form()
     profile_type = data._dict['profile_type']
     id = data._dict['user-selection']

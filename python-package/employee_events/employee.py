@@ -4,7 +4,7 @@ import query_base
 # Import dependencies needed for sql execution
 # from the `sql_execution` module
 #### YOUR CODE HERE
-from sql_execution import connect, db_path, QueryMixin
+from sql_execution import connect, db_path, QueryMixin, query
 # Define a subclass of QueryBase
 # called Employee
 #### YOUR CODE HERE
