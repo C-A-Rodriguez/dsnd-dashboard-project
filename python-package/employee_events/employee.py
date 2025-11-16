@@ -1,5 +1,6 @@
 # Import the QueryBase class
 #### YOUR CODE HERE
+import pandas as pd
 import query_base 
 # Import dependencies needed for sql execution
 # from the `sql_execution` module
@@ -69,11 +70,16 @@ class Employee(query_base.QueryBase, QueryMixin):
     # the sql query
     #### YOUR CODE HERE
     def model_data(self, id):
-        return f"""
-                    SELECT SUM(positive_events) positive_events
-                         , SUM(negative_events) negative_events
-                    FROM {self.name}
-                    JOIN employee_events
-                        USING({self.name}_id)
-                    WHERE {self.name}.{self.name}_id = {id}
-                """
+        conn = connect(db_path)
+        query = f"""
+            SELECT ee.event_date,
+                   SUM(ee.positive_events) AS positive_events,
+                   SUM(ee.negative_events) AS negative_events
+            FROM employee_events ee
+            JOIN {self.name} e
+                USING(employee_id)
+            WHERE e.employee_id = {id}
+            GROUP BY ee.event_date
+            ORDER BY ee.event_date
+        """
+        return pd.read_sql_query(query, conn)
