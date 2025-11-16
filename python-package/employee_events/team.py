@@ -1,16 +1,19 @@
 # Import the QueryBase class
 # YOUR CODE HERE
-
+import query_base
 # Import dependencies for sql execution
 #### YOUR CODE HERE
+from sql_execution import connect, db_path, QueryMixin
 
 # Create a subclass of QueryBase
 # called  `Team`
 #### YOUR CODE HERE
+class Team(query_base.QueryBase, QueryMixin):
 
     # Set the class attribute `name`
     # to the string "team"
     #### YOUR CODE HERE
+    name = "team"
 
 
     # Define a `names` method
@@ -18,6 +21,7 @@
     # This method should return
     # a list of tuples from an sql execution
     #### YOUR CODE HERE
+    def names(self):
         
         # Query 5
         # Write an SQL query that selects
@@ -25,14 +29,21 @@
         # from the team table for all teams
         # in the database
         #### YOUR CODE HERE
-    
+        conn = connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute(f"""
+            SELECT team_name, team_id
+            FROM {self.name}
+        """)
+        return cursor.fetchall()
 
     # Define a `username` method
     # that receives an ID argument
     # This method should return
     # a list of tuples from an sql execution
     #### YOUR CODE HERE
-
+    def username(self, id):
+        
         # Query 6
         # Write an SQL query
         # that selects the team_name column
@@ -40,7 +51,14 @@
         # to only return the team name related to
         # the ID argument
         #### YOUR CODE HERE
-
+        conn = connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute(f"""
+            SELECT team_name
+            FROM {self.name}
+            WHERE team_id = {id}
+        """)
+        return cursor.fetchall()
 
     # Below is method with an SQL query
     # This SQL query generates the data needed for
